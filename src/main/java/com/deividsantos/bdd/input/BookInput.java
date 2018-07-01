@@ -1,29 +1,20 @@
-package com.deividsantos.bdd.dto;
+package com.deividsantos.bdd.input;
 
-public class Book {
-    private Integer code;
+public class BookInput {
+
     private String name;
     private Integer pages;
     private String genre;
     private String author;
 
-    public Book() {
+    public BookInput() {
     }
 
-    public Book(Integer code, String name, Integer pages, String genre, String author) {
-        this.code = code;
+    public BookInput(String name, Integer pages, String genre, String author) {
         this.name = name;
         this.pages = pages;
         this.genre = genre;
         this.author = author;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
     }
 
     public String getName() {
@@ -60,12 +51,12 @@ public class Book {
 
     @Override
     public String toString() {
-        return "Book{" +
-                "code=" + code +
-                ", name='" + name + '\'' +
+        return "BookOutput{" +
+                "name='" + name + '\'' +
                 ", pages=" + pages +
                 ", genre='" + genre + '\'' +
                 ", author='" + author + '\'' +
                 '}';
     }
+
 }

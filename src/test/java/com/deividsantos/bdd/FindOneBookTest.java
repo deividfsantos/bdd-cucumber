@@ -2,6 +2,7 @@ package com.deividsantos.bdd;
 
 import com.deividsantos.bdd.dto.Book;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -14,11 +15,11 @@ import static org.junit.Assert.assertEquals;
 
 public class FindOneBookTest {
 
-    ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
-    Book book;
+    private Book book;
 
-    @Given("^a running application\\.$")
+    @Given("^a running application$")
     public void a_running_application() throws Throwable {
 
     }
@@ -30,18 +31,23 @@ public class FindOneBookTest {
         getRequest.addHeader("content-type", "application/json");
         HttpResponse response = closeableHttpClient.execute(getRequest);
         book = objectMapper.readValue(response.getEntity().getContent(), Book.class);
-
     }
 
-    @Then("^it should return that the book has \"([^\"]*)\" pages$")
-    public void it_should_return_that_the_book_has_pages(Integer pages) throws Throwable {
+    @Then("^should return the book with the name \"([^\"]*)\" that has \"([^\"]*)\" pages$")
+    public void should_return_the_book_with_the_name_that_has_pages(String name, Integer pages) throws Throwable {
+        assertEquals(name, book.getName());
         assertEquals(pages, book.getPages());
     }
 
-    @Then("^should return that the book is of the genre of \"([^\"]*)\" and the author is \"([^\"]*)\"$")
+    @Then("^should return that the book is of the genre of \"([^\"]*)\" and the author is \"([^\"]*)\"\"$")
     public void should_return_that_the_book_is_of_the_genre_of_Comic_Book_and_the_author_is(String genre, String author) throws Throwable {
         assertEquals(genre, book.getGenre());
         assertEquals(author, book.getAuthor());
     }
 
+    @Then("^should return that the book is of the genre of \"([^\"]*)\" and the author is \"([^\"]*)\"$")
+    public void should_return_that_the_book_is_of_the_genre_of_and_the_author_is(String genre, String author) throws Throwable {
+        assertEquals(genre, book.getGenre());
+        assertEquals(author, book.getAuthor());
+    }
 }

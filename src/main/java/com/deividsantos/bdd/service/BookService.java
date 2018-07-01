@@ -17,10 +17,14 @@ public class BookService {
         return bookRepository.getAllBooks();
     }
 
-    public Book getBook(String name) throws Exception {
+    public Book getBook(Integer code) throws Exception {
         return getBooks().stream()
-                .filter(book -> book.getName().equalsIgnoreCase(name))
+                .filter(book -> book.getCode()==code)
                 .findFirst()
                 .orElseThrow(() -> new Exception());
+    }
+
+    public void insertBook(Book book) {
+        bookRepository.insetBook(book);
     }
 }
