@@ -2,7 +2,6 @@ package com.deividsantos.bdd;
 
 import com.deividsantos.bdd.dto.Book;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;

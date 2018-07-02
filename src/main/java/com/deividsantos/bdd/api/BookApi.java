@@ -1,15 +1,15 @@
 package com.deividsantos.bdd.api;
 
-import com.deividsantos.bdd.dto.Book;
-import com.deividsantos.bdd.input.BookInput;
 import com.deividsantos.bdd.output.BookOutput;
 import com.deividsantos.bdd.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +24,7 @@ public class BookApi {
     private ObjectMapper objectMapper;
 
     @GetMapping
-    public List<BookOutput> getAllBooks() {
+    public List<BookOutput> getAllBooks() throws IOException {
         return bookService.getBooks().stream()
                 .map(book -> objectMapper.convertValue(book, BookOutput.class))
                 .collect(Collectors.toList());

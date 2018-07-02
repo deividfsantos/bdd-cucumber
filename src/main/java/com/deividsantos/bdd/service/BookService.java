@@ -5,6 +5,7 @@ import com.deividsantos.bdd.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.io.IOException;
 import java.util.List;
 
 @Repository
@@ -13,7 +14,7 @@ public class BookService {
     @Autowired
     private BookRepository bookRepository;
 
-    public List<Book> getBooks() {
+    public List<Book> getBooks() throws IOException {
         return bookRepository.getAllBooks();
     }
 
