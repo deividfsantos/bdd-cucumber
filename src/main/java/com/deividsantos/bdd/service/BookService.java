@@ -23,8 +23,4 @@ public class BookService {
                 .findFirst()
                 .orElseThrow(() -> new Exception());
     }
-
-    public void insertBook(Book book) {
-        bookRepository.insetBook(book);
-    }
 }

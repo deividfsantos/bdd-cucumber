@@ -18,7 +18,4 @@ public class BookRepository {
         return books;
     }
 
-    public void insetBook(Book book) {
-        books.add(book);
-    }
 }

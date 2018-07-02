@@ -39,10 +39,4 @@ public class BookApi {
         }
     }
 
-    @PostMapping
-    public BodyBuilder insertBook(@RequestBody BookInput book) {
-        bookService.insertBook(objectMapper.convertValue(book, Book.class));
-        return ResponseEntity.accepted();
-    }
-
 }
