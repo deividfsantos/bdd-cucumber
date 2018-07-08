@@ -15,13 +15,14 @@ public class BookService {
     private BookRepository bookRepository;
 
     public List<Book> getBooks() throws IOException {
-        return bookRepository.getAllBooks();
+        return bookRepository.findAll();
     }
 
-    public Book getBook(Integer code) throws Exception {
-        return getBooks().stream()
-                .filter(book -> book.getCode()==code)
-                .findFirst()
-                .orElseThrow(() -> new Exception());
+    public Book getBook(Long code) throws Exception {
+        return bookRepository.findByCode(code);
+    }
+
+    public void insertBook(Book book) throws IOException {
+        bookRepository.save(book);
     }
 }

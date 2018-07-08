@@ -1,13 +1,12 @@
 package com.deividsantos.bdd.api;
 
+import com.deividsantos.bdd.dto.Book;
+import com.deividsantos.bdd.input.BookInput;
 import com.deividsantos.bdd.output.BookOutput;
 import com.deividsantos.bdd.service.BookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,12 +30,18 @@ public class BookApi {
     }
 
     @GetMapping("/{code}")
-    public BookOutput getBook(@PathVariable("code") Integer code) throws Exception {
+    public BookOutput getBook(@PathVariable("code") Long code) throws Exception {
         try {
             return objectMapper.convertValue(bookService.getBook(code), BookOutput.class);
         } catch (Exception e) {
             throw new Exception("No book found with the code entered.");
         }
+    }
+
+    @PostMapping
+    public void insertBook(@RequestBody BookInput book) throws IOException {
+        bookService.insertBook(objectMapper.convertValue(book, Book.class));
+
     }
 
 }
