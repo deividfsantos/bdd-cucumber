@@ -1,5 +1,6 @@
-package com.deividsantos.bdd;
+package com.deividsantos.bdd.cucumber;
 
+import com.deividsantos.bdd.TestConfig;
 import com.deividsantos.bdd.dto.Book;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cucumber.api.java.en.Given;
@@ -9,24 +10,28 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertEquals;
 
-public class FindOneBookTest {
+public class FindOneBookTest extends TestConfig {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private CloseableHttpClient closeableHttpClient;
 
     private Book book;
 
     @Given("^a running application$")
     public void a_running_application() throws Throwable {
-
+        closeableHttpClient = HttpClients.createDefault();
     }
 
     @When("^I access the endpoint \"([^\"]*)\" by GET$")
     public void i_access_the_endpoint_by(String endpoint) throws Throwable {
-        CloseableHttpClient closeableHttpClient = HttpClients.createDefault();
-        HttpGet getRequest = new HttpGet("http://localhost:8080" + endpoint);
+
+        HttpGet getRequest = new HttpGet("http://localhost:8081" + endpoint);
         getRequest.addHeader("content-type", "application/json");
         HttpResponse response = closeableHttpClient.execute(getRequest);
         book = objectMapper.readValue(response.getEntity().getContent(), Book.class);
