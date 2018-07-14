@@ -30,7 +30,6 @@ public class FindOneBookTest extends TestConfig {
 
     @When("^I access the endpoint \"([^\"]*)\" by GET$")
     public void i_access_the_endpoint_by(String endpoint) throws Throwable {
-
         HttpGet getRequest = new HttpGet("http://localhost:8081" + endpoint);
         getRequest.addHeader("content-type", "application/json");
         HttpResponse response = closeableHttpClient.execute(getRequest);

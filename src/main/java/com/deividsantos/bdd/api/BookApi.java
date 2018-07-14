@@ -41,7 +41,6 @@ public class BookApi {
     @PostMapping
     public void insertBook(@RequestBody BookInput book) throws IOException {
         bookService.insertBook(objectMapper.convertValue(book, Book.class));
-
     }
 
 }
