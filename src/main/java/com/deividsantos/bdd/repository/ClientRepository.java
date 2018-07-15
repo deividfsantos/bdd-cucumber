@@ -25,9 +25,10 @@ public class ClientRepository {
     }
 
     public void save(Client client) {
-        jdbcTemplate.update("insert into client (name, phone) values (?,?)",
+        jdbcTemplate.update("insert into client (name, phone, nationality) values (?,?,?)",
                 client.getName(),
-                client.getPhone()
+                client.getPhone(),
+                client.getNationality()
         );
     }
 

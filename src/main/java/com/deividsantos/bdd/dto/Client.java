@@ -5,14 +5,16 @@ public class Client {
     private Integer code;
     private String name;
     private String phone;
+    private String nationality;
 
     public Client() {
     }
 
-    public Client(Integer code, String name, String phone) {
+    public Client(Integer code, String name, String phone, String nationality) {
         this.code = code;
         this.name = name;
         this.phone = phone;
+        this.nationality = nationality;
     }
 
     public Integer getCode() {
@@ -39,12 +41,21 @@ public class Client {
         this.phone = phone;
     }
 
+    public String getNationality() {
+        return nationality;
+    }
+
+    public void setNationality(String nationality) {
+        this.nationality = nationality;
+    }
+
     @Override
     public String toString() {
         return "Client{" +
                 "code=" + code +
                 ", name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
+                ", nationality='" + nationality + '\'' +
                 '}';
     }
 }

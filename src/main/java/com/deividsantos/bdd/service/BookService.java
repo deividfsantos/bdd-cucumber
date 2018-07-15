@@ -3,6 +3,7 @@ package com.deividsantos.bdd.service;
 import com.deividsantos.bdd.dto.Book;
 import com.deividsantos.bdd.repository.BookRepository;
 import com.deividsantos.bdd.repository.RentalRepository;
+import com.deividsantos.bdd.restClient.CountryClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -21,7 +22,12 @@ public class BookService {
     @Autowired
     private ClientService clientService;
 
+    @Autowired
+    private CountryClient countryClient;
+
     public List<Book> get() throws IOException {
+        countryClient.getCountryByCode("BR");
+
         return bookRepository.findAll();
     }
 
