@@ -16,31 +16,32 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `book`
+-- Table structure for table `rental`
 --
 
-DROP TABLE IF EXISTS `book`;
+DROP TABLE IF EXISTS `rental`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `book` (
+CREATE TABLE `rental` (
   `code` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) NOT NULL,
-  `pages` int(11) NOT NULL,
-  `genre` varchar(50) NOT NULL,
-  `author` varchar(100) NOT NULL,
-  `stock` int(5) NOT NULL,
-  PRIMARY KEY (`code`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+  `client_code` int(11) NOT NULL,
+  `book_code` int(11) NOT NULL,
+  PRIMARY KEY (`code`),
+  KEY `client_code` (`client_code`),
+  KEY `book_code` (`book_code`),
+  CONSTRAINT `rental_ibfk_1` FOREIGN KEY (`client_code`) REFERENCES `client` (`code`),
+  CONSTRAINT `rental_ibfk_2` FOREIGN KEY (`book_code`) REFERENCES `book` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `book`
+-- Dumping data for table `rental`
 --
 
-LOCK TABLES `book` WRITE;
-/*!40000 ALTER TABLE `book` DISABLE KEYS */;
-INSERT INTO `book` VALUES (1,'Harry Potter and the order of the phoenix',123,'Fiction','J.K. Rowling',10),(2,'A Brief History of Time',385,'Science','Stephen Hawkings',10),(3,'Watchmen',650,'Comic Book','Alan Moore',9),(4,'The Universe in a Nutshell',1243,'Science','Stephen Hawkings',10),(5,'The Universe in a Nutshell',1243,'Science','Stephen Hawkings',10);
-/*!40000 ALTER TABLE `book` ENABLE KEYS */;
+LOCK TABLES `rental` WRITE;
+/*!40000 ALTER TABLE `rental` DISABLE KEYS */;
+INSERT INTO `rental` VALUES (1,1,1),(2,1,1),(5,1,3);
+/*!40000 ALTER TABLE `rental` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
