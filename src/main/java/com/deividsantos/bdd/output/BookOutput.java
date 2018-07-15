@@ -6,15 +6,17 @@ public class BookOutput {
     private Integer pages;
     private String genre;
     private String author;
+    private Integer stock;
 
     public BookOutput() {
     }
 
-    public BookOutput(String name, Integer pages, String genre, String author) {
+    public BookOutput(String name, Integer pages, String genre, String author, Integer stock) {
         this.name = name;
         this.pages = pages;
         this.genre = genre;
         this.author = author;
+        this.stock = stock;
     }
 
     public String getName() {
@@ -49,6 +51,14 @@ public class BookOutput {
         this.author = author;
     }
 
+    public Integer getStock() {
+        return stock;
+    }
+
+    public void setStock(Integer stock) {
+        this.stock = stock;
+    }
+
     @Override
     public String toString() {
         return "BookOutput{" +
@@ -56,6 +66,7 @@ public class BookOutput {
                 ", pages=" + pages +
                 ", genre='" + genre + '\'' +
                 ", author='" + author + '\'' +
+                ", stock=" + stock +
                 '}';
     }
 }

@@ -24,15 +24,15 @@ public class BookApi {
 
     @GetMapping
     public List<BookOutput> getAllBooks() throws IOException {
-        return bookService.getBooks().stream()
+        return bookService.get().stream()
                 .map(book -> objectMapper.convertValue(book, BookOutput.class))
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{code}")
-    public BookOutput getBook(@PathVariable("code") Long code) throws Exception {
+    public BookOutput getBook(@PathVariable("code") Integer code) throws Exception {
         try {
-            return objectMapper.convertValue(bookService.getBook(code), BookOutput.class);
+            return objectMapper.convertValue(bookService.get(code), BookOutput.class);
         } catch (Exception e) {
             throw new Exception("No book found with the code entered.");
         }
@@ -40,7 +40,11 @@ public class BookApi {
 
     @PostMapping
     public void insertBook(@RequestBody BookInput book) throws IOException {
-        bookService.insertBook(objectMapper.convertValue(book, Book.class));
+        bookService.insert(objectMapper.convertValue(book, Book.class));
     }
 
+    @PostMapping("/{bookCode}/rental/{clientCode}")
+    public void rentABook(@PathVariable("clientCode") Integer clientCode, @PathVariable("bookCode") Integer bookCode) throws Exception {
+        bookService.rent(clientCode, bookCode);
+    }
 }

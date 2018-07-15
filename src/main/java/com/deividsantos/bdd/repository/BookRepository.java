@@ -19,16 +19,24 @@ public class BookRepository {
                 new Object[]{}, new BeanPropertyRowMapper<>(Book.class));
     }
 
-    public Book findByCode(Long code) {
+    public Book find(Integer code) {
         return jdbcTemplate.queryForObject("select * from book where code = ?",
                 new Object[]{code}, new BeanPropertyRowMapper<>(Book.class));
     }
 
     public void save(Book book) {
-        jdbcTemplate.update("insert into book (name, pages, genre, author) values (?,?,?,?)",
+        jdbcTemplate.update("insert into book (name, pages, genre, author, stock) values (?,?,?,?,?)",
                 book.getName(),
                 book.getPages(),
                 book.getGenre(),
-                book.getAuthor());
+                book.getAuthor(),
+                book.getStock()
+        );
+    }
+
+    public void updateStock(Integer bookCode) {
+        jdbcTemplate.update("update book set stock = stock - 1 where code = ?",
+                bookCode
+        );
     }
 }

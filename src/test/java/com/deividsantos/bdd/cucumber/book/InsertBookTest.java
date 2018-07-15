@@ -1,4 +1,4 @@
-package com.deividsantos.bdd.cucumber;
+package com.deividsantos.bdd.cucumber.book;
 
 import com.deividsantos.bdd.TestConfig;
 import com.deividsantos.bdd.dto.Book;
@@ -20,15 +20,13 @@ import java.io.IOException;
 
 import static org.junit.Assert.assertEquals;
 
-public class InsertOneBookTest extends TestConfig {
+public class InsertBookTest extends TestConfig {
 
     @Autowired
     private ObjectMapper objectMapper;
 
     private CloseableHttpClient closeableHttpClient;
-
     private Book book;
-
     private Book expectedBook;
 
     @Before
@@ -48,6 +46,7 @@ public class InsertOneBookTest extends TestConfig {
         book.setPages(pages);
         book.setGenre(genre);
         book.setAuthor(author);
+        book.setStock(5);
     }
 
     @When("^I save the book in the endpoint \"([^\"]*)\" by POST$")

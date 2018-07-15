@@ -1,7 +1,7 @@
-package com.deividsantos.bdd.cucumber;
+package com.deividsantos.bdd.cucumber.book;
 
 import com.deividsantos.bdd.TestConfig;
-import com.deividsantos.bdd.dto.Book;
+import com.deividsantos.bdd.output.BookOutput;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
@@ -21,7 +21,7 @@ public class FindOneBookTest extends TestConfig {
 
     private CloseableHttpClient closeableHttpClient;
 
-    private Book book;
+    private BookOutput book;
 
     @Given("^a running application$")
     public void a_running_application() throws Throwable {
@@ -33,7 +33,7 @@ public class FindOneBookTest extends TestConfig {
         HttpGet getRequest = new HttpGet("http://localhost:8081" + endpoint);
         getRequest.addHeader("content-type", "application/json");
         HttpResponse response = closeableHttpClient.execute(getRequest);
-        book = objectMapper.readValue(response.getEntity().getContent(), Book.class);
+        book = objectMapper.readValue(response.getEntity().getContent(), BookOutput.class);
     }
 
     @Then("^should return the book with the name \"([^\"]*)\" that has \"([^\"]*)\" pages$")
