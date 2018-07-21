@@ -12,7 +12,7 @@ CREATE TABLE client (
   code int(11) NOT NULL AUTO_INCREMENT,
   name varchar(100) NOT NULL,
   phone varchar(20) NOT NULL,
-  nationality varchar(2) NOT NULL,
+  nationality varchar(50) NOT NULL,
   PRIMARY KEY (code)
 );
 

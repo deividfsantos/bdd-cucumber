@@ -49,15 +49,17 @@ public class FindClientList extends TestConfig {
     public void should_return_a_list_with_all_saved_clients() {
         assertEquals(clients.get(0).getName(), expectedClients().get(0).getName());
         assertEquals(clients.get(0).getPhone(), expectedClients().get(0).getPhone());
+        assertEquals(clients.get(0).getNationality(), expectedClients().get(0).getNationality());
 
         assertEquals(clients.get(1).getName(), expectedClients().get(1).getName());
         assertEquals(clients.get(1).getPhone(), expectedClients().get(1).getPhone());
+        assertEquals(clients.get(1).getNationality(), expectedClients().get(1).getNationality());
     }
 
     public List<ClientOutput> expectedClients() {
         return Arrays.asList(
-                new ClientOutput("Deivid Santos", "51985236599"),
-                new ClientOutput("Joseclilton Silva", "51963250465")
+                new ClientOutput("Deivid Santos", "51985236599", "Brazil"),
+                new ClientOutput("Joseclilton Silva", "51963250465", "United States of America")
         );
     }
 

@@ -3,8 +3,11 @@ package com.deividsantos.bdd.cucumber.client;
 import com.deividsantos.bdd.TestConfig;
 import com.deividsantos.bdd.input.ClientInput;
 import com.deividsantos.bdd.output.ClientOutput;
+import com.deividsantos.bdd.restClient.response.CountryResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import cucumber.api.java.Before;
+import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
@@ -15,10 +18,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.junit.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.Assert.assertEquals;
 
 public class InsertClientTest extends TestConfig {
@@ -27,22 +32,34 @@ public class InsertClientTest extends TestConfig {
     private ObjectMapper objectMapper;
 
     private CloseableHttpClient closeableHttpClient;
-
     private ClientInput clientInput;
-
     private HttpPost postRequest;
+    private HttpResponse response;
+
+    @Rule
+    public WireMockRule wireMockRule = new WireMockRule(8089);
 
     @Before
     public void setup() {
+        wireMockRule.stubFor(get(urlPathEqualTo("/country/get/iso2code/BR"))
+                .willReturn(aResponse()
+                        .withHeader("Content-Type", "text/json")
+                        .withStatus(417)
+                        .withBody("{}")));
         clientInput = new ClientInput();
         closeableHttpClient = HttpClients.createDefault();
-
     }
 
     @Given("^I want to save the client \"([^\"]*)\" with the phone \"([^\"]*)\"$")
     public void i_want_to_save_the_client_with_the_phone(String name, String phone) {
         clientInput.setName(name);
         clientInput.setPhone(phone);
+    }
+
+    @And("^nationality is \"([^\"]*)\"$")
+    public void nationalityIs(String nationality) throws Throwable {
+        clientInput.setNationality(nationality);
+
     }
 
     @When("^I access the endpoint \"([^\"]*)\" by POST with this client$")
@@ -52,19 +69,31 @@ public class InsertClientTest extends TestConfig {
         postRequest.setEntity(new StringEntity(new Gson().toJson(clientInput)));
     }
 
-    @Then("^should save the client and return \"([^\"]*)\"$")
-    public void shouldSaveTheClientAndReturn(int returnCode) throws Throwable {
-        HttpResponse response = closeableHttpClient.execute(postRequest);
-        assertEquals(returnCode, response.getStatusLine().getStatusCode());
+    @Then("^should save the client$")
+    public void shouldSaveTheClient() throws Throwable {
+        response = closeableHttpClient.execute(postRequest);
+    }
+
+    @And("^return (\\d+) with this client with nationality \"([^\"]*)\"$")
+    public void returnWithThisClientWithNationality(int statusCode, String nationality) throws Throwable {
+        assertEquals(statusCode, response.getStatusLine().getStatusCode());
         assertEquals(getSavedClient().getName(), clientInput.getName());
         assertEquals(getSavedClient().getPhone(), clientInput.getPhone());
+        assertEquals(getSavedClient().getNationality(), nationality);
     }
 
     public ClientOutput getSavedClient() throws IOException {
+        HttpGet getRequest2 = new HttpGet("http://services.groupkt.com/country/get/iso2code/BR");
+        getRequest2.addHeader("content-type", "application/json");
+        HttpResponse response2 = closeableHttpClient.execute(getRequest2);
+        CountryResponse countryResponse = objectMapper.readValue(response2.getEntity().getContent(), CountryResponse.class);
+
+
         HttpGet getRequest = new HttpGet("http://localhost:8081/v1/clients/3");
         getRequest.addHeader("content-type", "application/json");
         HttpResponse response = closeableHttpClient.execute(getRequest);
         return objectMapper.readValue(response.getEntity().getContent(), ClientOutput.class);
     }
+
 
 }
