@@ -3,9 +3,9 @@ package com.deividsantos.bdd.cucumber.client;
 import com.deividsantos.bdd.TestConfig;
 import com.deividsantos.bdd.input.ClientInput;
 import com.deividsantos.bdd.output.ClientOutput;
-import com.deividsantos.bdd.restClient.response.CountryResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
@@ -18,12 +18,12 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.junit.Rule;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.IOException;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.junit.Assert.assertEquals;
 
 public class InsertClientTest extends TestConfig {
@@ -35,19 +35,35 @@ public class InsertClientTest extends TestConfig {
     private ClientInput clientInput;
     private HttpPost postRequest;
     private HttpResponse response;
-
-    @Rule
-    public WireMockRule wireMockRule = new WireMockRule(8089);
+    private WireMockServer wireMockServer;
 
     @Before
     public void setup() {
-        wireMockRule.stubFor(get(urlPathEqualTo("/country/get/iso2code/BR"))
+        wireMockServer = new WireMockServer(wireMockConfig().port(8089));
+        wireMockServer.start();
+        wireMockServer.stubFor(get(urlEqualTo("/country/get/iso2code/BR"))
                 .willReturn(aResponse()
                         .withHeader("Content-Type", "text/json")
-                        .withStatus(417)
-                        .withBody("{}")));
+                        .withStatus(200)
+                        .withBody("{\n" +
+                                "    \"RestResponse\": {\n" +
+                                "        \"messages\": [\n" +
+                                "            \"Country found matching code [BR].\"\n" +
+                                "        ],\n" +
+                                "        \"result\": {\n" +
+                                "            \"name\": \"Brazil\",\n" +
+                                "            \"alpha2_code\": \"BR\",\n" +
+                                "            \"alpha3_code\": \"BRA\"\n" +
+                                "        }\n" +
+                                "    }\n" +
+                                "}")));
         clientInput = new ClientInput();
         closeableHttpClient = HttpClients.createDefault();
+    }
+
+    @After
+    public void end() {
+        wireMockServer.stop();
     }
 
     @Given("^I want to save the client \"([^\"]*)\" with the phone \"([^\"]*)\"$")
@@ -83,12 +99,6 @@ public class InsertClientTest extends TestConfig {
     }
 
     public ClientOutput getSavedClient() throws IOException {
-        HttpGet getRequest2 = new HttpGet("http://services.groupkt.com/country/get/iso2code/BR");
-        getRequest2.addHeader("content-type", "application/json");
-        HttpResponse response2 = closeableHttpClient.execute(getRequest2);
-        CountryResponse countryResponse = objectMapper.readValue(response2.getEntity().getContent(), CountryResponse.class);
-
-
         HttpGet getRequest = new HttpGet("http://localhost:8081/v1/clients/3");
         getRequest.addHeader("content-type", "application/json");
         HttpResponse response = closeableHttpClient.execute(getRequest);
